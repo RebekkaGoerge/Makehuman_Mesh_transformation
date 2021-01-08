@@ -67,8 +67,8 @@ Download the plugins and copy them to the makehuman plugin directory (~\makehuma
 <a name="runTheCode"></a>
 
 ## Run the code 
-%to do copy link 
-1. Open the file "vs01_STL2MakeHuman.py"
+
+1. Open the file "vs01_STL2MakeHuman.py" from this repository
 2. Adapt the paramters *projectPath*, *modelName*, *vsWeight* and *decimateValue* according to your model and project 
 3. Save the file 
 4. If you have run the code before with the same model name, clean the clothes, proxymesh and export folder 
