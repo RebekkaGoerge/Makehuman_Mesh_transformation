@@ -40,11 +40,7 @@ Install the blender plugins:
 
 4. By pressing "N" the makehuman bar appears at the right side:
 
-<img src="blender_mh.png" alt="blender_makehuman" width="600"/>
-
-
-
-
+<img src="https://user-images.githubusercontent.com/62305343/103997470-661eb000-519b-11eb-97a4-dcc8c81c8d4d.png" alt="blender_makehuman" width="600"/>
 
 
 ### Download the following plugins for makehuman: 
@@ -61,12 +57,11 @@ Download the plugins and copy them to the makehuman plugin directory (~\makehuma
 
 1. The socket plugin and the MHAPI are makehuman plugins and can be activated in the normal plugin folder. 
 
-<img src="makehuman_normal_plugin.png" alt="Install plugins" width="600"/>
-
+<img src="https://user-images.githubusercontent.com/62305343/103997466-64ed8300-519b-11eb-8de7-96f53de4aae0.png" alt="Install plugins" width="600"/>
 
 2. As the vs_Script is a user plugin, it needs to be activated as user plugin. 
 
-<img src="makehuman_plugin.png" alt="Install plugins" width="600"/>
+<img src="https://user-images.githubusercontent.com/62305343/103997415-569f6700-519b-11eb-8b17-0d3339c42c89.png" alt="Install plugins" width="600"/>
 
 
 <a name="runTheCode"></a>
