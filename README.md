@@ -1,0 +1,2 @@
+# Makehuman_Mesh_transformation
+The following script and plugin for makehuman can be used to load an arbitrary person mesh (.stl) into makehuman by generating a proxy. The weight of the proxy can be modified via the script and afterwards is exported back to an stl file. Furthermore the proxy can also be modified manually in makehuman. The script and plugin uses makehuman and blender and some plugins. 
