@@ -49,7 +49,8 @@ Install the blender plugins:
 
 * [MHAPI](http://download.tuxfamily.org/makehuman/plugins/mhapi-latest.zip)
 
-* [9_vsScript plugin]()
+* [09_vsScript.py](https://github.com/RebekkaGoerge/Makehuman_Mesh_transformation/blob/main/vsMeshTransformation/9_vsScript.py)
+
 
 
 
@@ -68,21 +69,21 @@ Download the plugins and copy them to the makehuman plugin directory (~\makehuma
 
 ## Run the code 
 
-1. Open the file "vs01_STL2MakeHuman.py" from this repository
+1. After following the steps from getting start, you can open the file  [vs01_STL2MakeHuman.py](https://github.com/RebekkaGoerge/Makehuman_Mesh_transformation/blob/main/vsMeshTransformation/vs01_STL2MakeHuman.py) 
 2. Adapt the paramters *projectPath*, *modelName*, *vsWeight* and *decimateValue* according to your model and project 
-3. Save the file 
-4. If you have run the code before with the same model name, clean the clothes, proxymesh and export folder 
-5. Run the code from the console as administrator with the following command: **blender --background --python vs01_STL2MakeHuman.py**
-6. The code needs some minutes to run, afterwards you can find the created proxy from your mesh in the proxymesh folder
-7. if the parameter *export stl* is set to true, you can also find the modified stl file (according to the parameters you set in the beginning) in the export folder  
-
+3. Adapt the transformation part to your model, it needs to have the same size and rotation like the human base mesh and the middle of the mesh needs to be centered at (0,0,0), you can either change the transformation part in the code or adapt your mesh in blender to the human base mesh and afterwards skip the transformation part in the code
+4. Save the file  
+5. If you have run the code before with the same model name, clean the clothes, proxymesh and export folder 
+6. Run the code from the console as administrator with the following command: **blender --background --python vs01_STL2MakeHuman.py**
+7. The code needs some minutes to run, afterwards you can find the created proxy from your mesh in the proxymesh folder
+8. if the parameter *export stl* is set to true, you can also find the modified stl file (according to the parameters you set in the beginning) in the export folder  
 <a name="scripts"></a>
 
 ## How does it work:
 
 Scripts:
-- vs01_STL2Makehuman.py 
-- 09_vsScript.py
+- [vs01_STL2MakeHuman.py](https://github.com/RebekkaGoerge/Makehuman_Mesh_transformation/blob/main/vsMeshTransformation/vs01_STL2MakeHuman.py)
+- [09_vsScript.py](https://github.com/RebekkaGoerge/Makehuman_Mesh_transformation/blob/main/vsMeshTransformation/9_vsScript.py)
 
 
 ### vs01_STL2Makehuman:
@@ -138,4 +139,53 @@ Scripts:
 
 The script is executed with blender. After setting up the parameters, the mesh is compressed. This needs to be done, in order that the loaded mesh has a similar size to the human base mesh. The method *iaModifyPluginFile(1,0)* and *startMakeHumanProcess* are called and afterwards makehuman is started and the window is minimized. Now blender can connect to makehuman and can import the mh base mesh with the method *mkh_importBody*. Afterwards, the compressed stl model is also imported into blender. The model is transformed so that it fits in orientation, rotation and size to the makehuman model (this need to be adapted if the model differs from our standarts). The model is extended through an uv map and the vertex are grouped into a vertex group. The model is marked as "clothes" and loose vertices are removed. Afterwards, the create_clothes() method from the makeclothes plugin is called. After a succesful creation of the clothes, they should be stored in the ~\makehuman\v1py3data\clothes folder. We copy this folder to the ~\makehuman\v1py3\data\proxymesh folder. Furthermore, we copy the modelName.mhclo file to a modelName.proxy file. Now we have our makehuman proxy. For now makehuman is closed. 
 
-If the *export_stl* variable is set to true in the next part we modify our plugin *09_vsScript.py* by calling *iaModifyPluginFile(1,1)*, so next time makehuman is started, the window will be minimized and also our new proxy will be loaded, modified and exported. Here we also transfer the model name and the values to modify the model. After modifing the plugin, we restart makehuman. By restarting makehuman the plugin is also loaded. The plugin minimize the makehuman window, and tries to load the mesh with the model name and the selected weight. Afterwards, it tries to export the modified model to an stl file. And finally closes makehuman.  The exported file can be found in the export folder (~\makehuman\v1py3\exports). 
+If the *export_stl* variable is set to true in the next part we modify our plugin *09_vsScript.py* by calling *iaModifyPluginFile(1,1)*, so next time makehuman is started, the window will be minimized and also our new proxy will be loaded, modified and exported. Here we also transfer the model name and the values to modify the model. After modifing the plugin, we restart makehuman. By restarting makehuman the plugin is also loaded. The plugin minimize the makehuman window, and tries to load the mesh with the model name and the selected weight. Afterwards, it tries to export the modified model to an stl file. And finally closes makehuman.  The exported file can be found in the export folder (~\makehuman\v1py3\exports).
+
+
+<a name="examples"></a>
+
+## Examples
+
+In the following some examples are presented, which were processed by the plugin. Input is a stl file is a free 3d mesh. We tested our plugin also with some 3d Scans, which worked fine. While the 3d scan needed to be compressed in size, the free 3d Mesh doesn't need to be compressed in size. Afterwards the models has been imported to blender and preprocessed, next with the help of blender a proxy is generated and afterwards the proxy is imported to makehuman and modified in the weight. After the process the genreated makehuman proxy can be either modified in makehuman or the exported and modified stl file can be used for other purpose. 
+
+<img src="https://user-images.githubusercontent.com/62305343/104008312-93725a80-51a9-11eb-9a1b-2929f3deaf4a.png" alt="Model with reduced weight" width="250"/>
+
+*Model with reduced weight*
+
+<img src="https://user-images.githubusercontent.com/62305343/104008315-94a38780-51a9-11eb-8614-931849629526.png" alt="Model with an increased weight" width="250"/>
+
+*Model with an increased weight*
+
+<img src="https://user-images.githubusercontent.com/62305343/104008325-966d4b00-51a9-11eb-83f6-d07c1918cc84.png" alt="comparision processed models" width="250"/>
+
+*Comparision of the exported model with increased and reduced weight in blender* 
+
+
+<img src="https://user-images.githubusercontent.com/62305343/104008323-95d4b480-51a9-11eb-8820-c35ba40b878c.png" alt="comparision processed models" width="250"/>
+
+*Manually processed model with makehuman gui* 
+
+<a name="manually"></a>
+
+## Work manually with the plugin 
+
+The generated proxymeshes can be also modified in makehuman. In the following, it is described how to open a proxy file in makehuman and to transfer it. Furthermore, the plugin has also a gui in makehuman and can be used there. 
+
+## 1. 
+
+<img src="https://user-images.githubusercontent.com/62305343/104008329-9705e180-51a9-11eb-8112-2acf3c6cc98c.png" alt="Manual Step1" width="600"/>
+
+*Open makehuman and select the tab Geometries, then go to the tab Topologies, in the tab topologies select in the right side the proxy file you want to load, it takes some seconds to load* *
+
+### 2. 
+
+<img src="https://user-images.githubusercontent.com/62305343/104008332-979e7800-51a9-11eb-8baa-690ee04b6025.png" alt="Manual Step3" width="600"/>
+
+*You also have to remove the makehuman eye proxy, therefore go to eyes, and select in the left bar "none"* 
+
+### 3. 
+
+<img src="https://user-images.githubusercontent.com/62305343/104008336-9a00d200-51a9-11eb-88c8-0c28d582f446.png" alt="Manual Step5" width="600"/>
+
+*Now you can go to modelling and change the slider as you want, you can change the main body but also other parts of the body by selecting the corresponding tabs*
+
