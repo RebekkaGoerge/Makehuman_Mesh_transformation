@@ -8,8 +8,9 @@ The following script and plugin for makehuman can be used to load an arbitrary p
 1. [Getting start](#gettingStart)  
 2. [Use the plugin](#runTheCode)  
 3. [How does the scripts work](#script)  
-4. [Examples](#examples)  
+4. [Example](#examples)  
 5. [How to work manually with the plugin](#manually)   
+6. [How to adapt your mesh in size/rotation to MakehumanBasemesh](#transform)   
 
 <a name="gettingStart"></a>
 
@@ -51,16 +52,15 @@ Download the plugins and copy them to the makehuman plugin directory (~\makehuma
 <a name="runTheCode"></a>
 
 ## Run the code 
-
-1. After following the steps from getting start, you can open the file  [vs01_STL2MakeHuman.py](https://github.com/RebekkaGoerge/Makehuman_Mesh_transformation/blob/main/vsMeshTransformation/vs01_STL2MakeHuman.py) 
-2. Adapt the paramters *projectPath*, *modelName*, *vsWeight* and *decimateValue* according to your model and project 
-3. Adapt the transformation part to your model, it needs to have the same size and rotation like the human base mesh and the middle of the mesh needs to be centered at (0,0,0), you can either change the transformation part in the code or adapt your mesh in blender to the human base mesh and afterwards skip the transformation part in the code
+ 
+1. After following the steps from <a name="gettingStart">getting start</a>, you can open the file  [vs01_STL2MakeHuman.py](https://github.com/RebekkaGoerge/Makehuman_Mesh_transformation/blob/main/vsMeshTransformation/vs01_STL2MakeHuman.py) 
+2. Adapt the paramters *projectPath*, *modelName*, *vsWeight*, *exportStl*, *doCompression*, *decimateValue* and *doTransform* according to your model and project (all parameters are explained in detail in <a name="scripts">scripts</a>)
+3. Adapt the transformation part to your model, it needs to have the same size and rotation like the human base mesh and the middle of the mesh needs to be centered at (0,0,0), you can either change the transformation part in the code or adapt your mesh in blender to the human base mesh and afterwards skip the transformation part in the code (set *doTransform* to 0)
 4. Save the file  
 5. If you have run the code before with the same model name, clean the clothes, proxymesh and export folder 
 6. Run the code from the console as administrator with the following command: **blender --background --python vs01_STL2MakeHuman.py**
 7. The code needs some minutes to run, afterwards you can find the created proxy from your mesh in the proxymesh folder
 8. if the parameter *export stl* is set to true, you can also find the modified stl file (according to the parameters you set in the beginning) in the export folder  
-<a name="scripts"></a>
 
 ## How does it work:
 
@@ -70,30 +70,32 @@ Scripts:
 
 
 ### vs01_STL2Makehuman:
-
 **parameters (set through the user):**
 
-* *project path* : path to the folder of the mesh 
-* *model name*: name of the mesh
-* *doCompression*: compression or not (mesh needs to have a similar size to the mh base mesh)
-* *decimateValue*: value how much mesh is compressed
-* *exportSTL*: 1 if a stl file with modified weight should be generated, 0 if only the makehuman proxymesh needs to be generated
-* *vsWeight*: a value between 0 and 1 
-
+* *project path* :  path to the folder of the mesh 
+* *model name*:     name of the mesh
+* *doCompression*:  compression or not 
+                    mesh needs to have a similar size to the mh base mesh
+                    if your mesh is small enough do not do the compression
+* *decimateValue*:  value how much the mesh is compressed
+* *exportSTL*:      1 if a stl file with modified weight should be generated, 0 if only the makehuman proxymesh needs to be generated
+* *vsWeight*:       a value between 0 and 1 
+* *doTransform*:    set to 0, if you already adapted your mesh to size and rotation of the human base mesh, 
+                   if you want to do the transform in the script set doTransform to 1 and adapt the transformation values depending of your script
 
 **methods:**
 * *startMakeHumanProcess(delay time)*:
   
-  makehuman is started from the code with a delay time until the system is loaded
+  * makehuman is started from the code with a delay time until the system is loaded
 * *iaModifyPluginFile(doMinimize, doMKWork)* 
 
-  changes the plugin *09_vsScript* according to the parameters
-  if doMinimize:  the makehuman window is minimized after the plugin has loaded
-  if doMKWork:    the plugin loads the generated mesh to makehuman, modifies it and exports the mesh back to stl
+  * changes the plugin *09_vsScript* according to the parameters
+  * if *doMinimize*:  the makehuman window is minimized after the plugin has loaded
+  * if *doMKWork*:    the plugin loads the generated mesh to makehuman, modifies it and exports the mesh back to stl
 
 * *mkh_importBody()*
 
- imports makehuman base mesh 
+  * imports makehuman base mesh 
 
 
 ### 09_vsScript
@@ -101,28 +103,29 @@ Scripts:
 **methods**
 * load(app): 
 
-  this method is called when the plugin is loaded into makehuman 
-  minimizes the window 
-  calls loadProxy and exportProxy 
+  * this method is called when the plugin is loaded into makehuman 
+  * minimizes the window 
+  * calls loadProxy and exportProxy 
 
 * loadProxy(app,vsWeight,modelName,userDocPath, mkhPath): 
 
-  loads the proxy with the model name and change the weight according to the defined weight 
+  * loads the proxy with the model name and change the weight according to the defined weight 
 
 * exportProxy(app, modelName):
 
-  export the proxy to an stl file and stores it 
+  * export the proxy to an stl file and stores it 
 
 * unload(app): 
 
-  this method is called if th plugin is unloaded 
+  * this method is called if the plugin is unloaded 
+
 
 
 **Workflow**
 
-The script is executed with blender. After setting up the parameters, the mesh is compressed. This needs to be done, in order that the loaded mesh has a similar size to the human base mesh. The method *iaModifyPluginFile(1,0)* and *startMakeHumanProcess* are called and afterwards makehuman is started and the window is minimized. Now blender can connect to makehuman and can import the mh base mesh with the method *mkh_importBody*. Afterwards, the compressed stl model is also imported into blender. The model is transformed so that it fits in orientation, rotation and size to the makehuman model (this need to be adapted if the model differs from our standarts). The model is extended through an uv map and the vertex are grouped into a vertex group. The model is marked as "clothes" and loose vertices are removed. Afterwards, the create_clothes() method from the makeclothes plugin is called. After a succesful creation of the clothes, they should be stored in the ~\makehuman\v1py3data\clothes folder. We copy this folder to the ~\makehuman\v1py3\data\proxymesh folder. Furthermore, we copy the modelName.mhclo file to a modelName.proxy file. Now we have our makehuman proxy. For now makehuman is closed. 
+The script is executed with blender. After setting up the parameters, the mesh is compressed. This needs to be done, in order that the loaded mesh has a similar size to the human base mesh. The method *iaModifyPluginFile(1,0)* and *startMakeHumanProcess* are called. Makehuman is started and the window is minimized. Now blender can connect to makehuman and can import the mh base mesh with the method *mkh_importBody*. Afterwards, the compressed stl model is imported into blender. If *doTransform* is set to true, the model is transformed to fit in orientation, rotation and size to the makehuman model. The parameters of rotation, scale and size are adapted to our standarts, either the values can be changed acoording to the model, or the model can be adapted before and the transformation part can be skipped. If the model is not adapted to the mh base mesh, problems occur later when the mesh is loaded into makehuman. The model would not be centered and would not fit in size and rotation to the mh model and so the modelling would not work. After the transformation, the model is extended through an uv map and the vertices are grouped into a vertex group which need to be called "body". The model is marked as "clothes" and loose vertices are removed. Afterwards, the create_clothes() method from the makeclothes plugin is called. After a succesful creation of the clothes, they should be stored in the *(~\makehuman\v1py3data\clothes)* folder. We copy this folder to the *(~\makehuman\v1py3\data\proxymesh)* folder. Furthermore, we copy the *modelName.mhclo* file to a *modelName.proxy* file. Now we have our makehuman proxy. For now makehuman is closed. 
 
-If the *export_stl* variable is set to true in the next part we modify our plugin *09_vsScript.py* by calling *iaModifyPluginFile(1,1)*, so next time makehuman is started, the window will be minimized and also our new proxy will be loaded, modified and exported. Here we also transfer the model name and the values to modify the model. After modifing the plugin, we restart makehuman. By restarting makehuman the plugin is also loaded. The plugin minimize the makehuman window, and tries to load the mesh with the model name and the selected weight. Afterwards, it tries to export the modified model to an stl file. And finally closes makehuman.  The exported file can be found in the export folder (~\makehuman\v1py3\exports).
+If the *export_stl* variable is set to true, we modify our plugin *09_vsScript.py* by calling *iaModifyPluginFile(1,1)*, so next time makehuman is started, the window will be minimized and also our new proxy will be loaded, modified and exported. Here we also transfer the model name and the values to modify the model. After modifing the plugin, we restart makehuman. By restarting makehuman the plugin is also loaded. The plugin minimizes the makehuman window, and tries to load the mesh with the model name and the selected weight. Afterwards, it tries to export the modified model to an stl file. Finally, makehuman is closed  The exported file can be found in the export folder *(~\makehuman\v1py3\exports)*. 
 
 
 <a name="examples"></a>
@@ -154,12 +157,23 @@ In the following some examples are presented, which were processed by the plugin
 
 The generated proxymeshes can be also modified in makehuman. In the following, it is described how to open a proxy file in makehuman and to transfer it. Furthermore, the plugin has also a gui in makehuman and can be used there. 
 
-1. Open makehuman and select the tab "Geometries"
-2. Go to the tab Topologies
-3. Select in the right side the proxy file you want to load, it takes some seconds to load
-4. Remove the makehuman eye proxy, therefore go to eyes, and select in the left bar "none"
-5. Go to modelling and change the slider as you want, you can change the main body but also other parts of the body by selecting the corresponding tabs
-6. You can also use the plugin manually. To find it, go to the tab Utilities and select the vsScript tab. There you can export it to an stl file or load a proxy.
+1. Open makehuman and select the tab *Geometries*
+2. Go to the tab *Topologies*
+3. Select in the right side the proxy file, it takes some seconds to load
+4. Remove the makehuman eye proxy, therefore go to *Eyes*, and select in the left bar "none"
+5. Go to *Modelling* and change the slider as you want, you can change the main body but also other parts of the body by selecting the corresponding tabs
+6. You can also use the plugin manually. To find it, go to the tab *Utilities* and select the *vsScript* tab. There you can export it to an stl file or load a proxy.
 
 ![manual_github](https://user-images.githubusercontent.com/62305343/104573803-9fe92e00-5655-11eb-940e-474f38280136.gif)
 
+<a name="transform"></a>
+
+## How to adapt your mesh in size/rotation to MakehumanBasemesh 
+
+Your mesh needs to fit in size and rotation to the mh basemesh. This is done in the script automatically. But if your mesh has a different size and rotation than our standarts you need to adapt the values or change the size/rotation manually. But you can use blender to adapt your mesh to the mh basemesh, or to find out the values to adapt in our script. 
+
+* Import your mesh and mh basemesh to blender and adapt size and values. Makesure the feets of mh basemesh are not placed on the ground. 
+![manual_transform](https://user-images.githubusercontent.com/62305343/104585824-ebef9f00-5664-11eb-9982-a095eb5f12c4.gif)
+
+* Now the values can also be copied to the script, to automatically transform several meshs with the same size. 
+![manual_transform_values](https://user-images.githubusercontent.com/62305343/104585874-fad65180-5664-11eb-9aba-b45706c1512c.gif)
