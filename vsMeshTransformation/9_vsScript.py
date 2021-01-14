@@ -1,6 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+#===================================================================
+#                           9_vsScript
+#===================================================================
+#The plugin for makehuman can be used to proxymesh in makehuman, change to a predefined weight, and export the proxymesh back to an stl. 
+#
+#Usage: 
+#The parameters are incurred from the STL2Makehuman.py 
+
+# Authors:   Ibraheem Al-Dhamari, idhamari@uni-koblenz.de
+#            Rebekka Görge,       rgoerge@uni-koblenz.de
+#            
+#
+#
+# Last edit: 14.01.21 
+#===================================================================
+
+
 """
 **Project Name:**      MakeHuman
 
@@ -118,11 +135,11 @@ def load(app):
     #minimise the window ....
     category = app.getCategory('Utilities')
     taskview = category.addTask(vsScriptTaskView(category))
- 
+    
     doMinimize    = 0
     doMKWork      = 0
-    vsWeight      = 1.0
-    modelName     = "T3_large_s_mkh"
+    vsWeight      = 0.5
+    modelName     = "Github_middle_s_mkh"
     userDocPath   = r"C:\Users\Bekki\Documents"
     mkhPath       = r"c:\Program Files\makehuman-community"
     
@@ -146,12 +163,7 @@ def load(app):
            exportProxy(app, modelName)
         except:
            log.message("error during saving stl ..................")
-    #TODO: try app. instead of self.
-    #app.mainwin.show()
-
-    #app.mainwin.hide()
-    #app.mainwin.close()
-    #app.closeAllWindows()
+ 
 
 
 # This method is called when the plugin is unloaded from makehuman

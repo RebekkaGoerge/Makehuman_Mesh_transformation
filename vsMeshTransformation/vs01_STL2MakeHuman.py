@@ -1,10 +1,30 @@
-#  
-# This script prepare a mesh to work with makehuman, the mesh can also be modified through the parameters
+#===================================================================
+#                           STL2Makehuman
+#===================================================================
+#The following script and plugin for makehuman can be used to load an arbitrary person mesh (.stl) into makehuman by generating a proxy.
+#The weight of the proxy can be modified via the script and afterwards it is exported back to an stl file.
+#Furthermore the proxy can also be modified manually in makehuman.
+#The script and plugin uses makehuman, blender and some plugins. 
+# Usage: 
+#   - Select input folder: the user provides path to a folder with a stl mesh
+#   - modelName: name of the stl mesh
+#   - doCompression:  compression or not 
+#                     mesh needs to have a similar size to the mh base mesh
+#                     if your mesh is small enough do not do the compression
+#   -   decimateValue: value how much the mesh is compressed
+#   -   exportSTL: 1 if a stl file with modified weight should be generated, 0 if only the makehuman proxymesh needs to be generated
+#   -   vsWeight: a value between 0 and 1 
+#   -   doTransform: set to 0, if you already adapted your mesh to size and rotation of the human base mesh, 
+#   -                if you want to do the transform in the script set doTransform to 1 and adapt the transformation values depending of your script
 #
-# to run: 
+# Authors:   Ibraheem Al-Dhamari, idhamari@uni-koblenz.de
+#            Rebekka Görge,       rgoerge@uni-koblenz.de
+#            
 #
-# blender --background --python vs01_STL2MakeHuman.py
 #
+# Last edit: 14.01.21 
+#===================================================================
+
 import bpy
 from bpy import data as D
 from bpy import context as C
@@ -21,7 +41,6 @@ print("========================================================")
 print("                    process starts                      ")
 print("========================================================")
 
-print(" plugins download and installations ......................")
 
 print("settings paths ......................")
 # 
@@ -30,12 +49,13 @@ delayTime =20   # time needed to open makehuman
 #============================================
 #parameters to adapt from user:
 #============================================
-projectPath     = os.path.join(os.path.expanduser("~"),"Documents","Studium","meshingtools")
+projectPath     = os.path.join(os.path.expanduser("~"),"Documents","Studium","4.MasterSemester","Forschungspraktikum_Ibraheem","Git_IA","meshingtools")
 #the model name
-modelName       = "T3_large"
+modelName       = "Github_middle"
 #the decimation value 
 decimate_value  = 0.95
 doCompress      = 1  # to disable compression process
+doTransform     = 1
 
 exportSTL       = 1 # if true a stl file with modified weight is generated, otherwise only the makehuman proxy is generated 
 #the weight in percent
@@ -46,7 +66,8 @@ outputModelFnm=cModelName + "_mkh"#+time
 
 doMinimize      = 1
 doMKWork        = 0
-#TODO: automate getting windows paths
+
+
 
 mkhPath             = os.path.join(os.path.expanduser("~"),"sw","makehuman-1.2.0.beta2","makehuman","makehuman")
 mkh_data            = os.path.join(os.path.expanduser("~"),"Documents","makehuman","v1py3","data")
@@ -146,6 +167,8 @@ if doCompress:
     print(" compress  meshes  ......................")
     vtkP = subprocess.Popen(["python3",vtkSTLcompressPath,modelPath,compressedModelPath,str(decimate_value)])
     vtkP.wait()
+else:
+    cModelName=modelName
 
 iaModifyPluginFile(1,0)
 
@@ -156,14 +179,15 @@ mkh_importBody()
 print(" import mesh: ",cModelName,compressedModelPath)
 bpy.ops.import_mesh.stl(filepath=compressedModelPath,filter_glob="*.stl", files=[{"name": cModelName+".stl", "name":cModelName+".stl"}], directory=path_to_model)
 
-print(" adapt model to makehuman base mesh     ......................")
-b_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1))
-bpy.ops.transform.resize(value=(0.107514, 0.107514, 0.107514),    orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
-bpy.ops.transform.resize(value=(0.0213201, 0.0213201, 0.0213201), orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
-bpy.ops.transform.resize(value=(0.411408, 0.411408, 0.411408),    orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
-bpy.ops.transform.rotate(value=rotation_angle_x, orient_axis='X', orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', constraint_axis=(True, False, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
-bpy.ops.transform.rotate(value=rotation_angle_z, orient_axis='Z', orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', constraint_axis=(False, False, True), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
-bpy.ops.transform.resize(value=(1.06056, 1.06056, 1.06056),       orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+if doTransform:
+    print(" adapt model to makehuman base mesh     ......................")
+    b_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1))
+    bpy.ops.transform.resize(value=(0.107514, 0.107514, 0.107514),    orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+    bpy.ops.transform.resize(value=(0.0213201, 0.0213201, 0.0213201), orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+    bpy.ops.transform.resize(value=(0.411408, 0.411408, 0.411408),    orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+    bpy.ops.transform.rotate(value=rotation_angle_x, orient_axis='X', orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', constraint_axis=(True, False, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+    bpy.ops.transform.rotate(value=rotation_angle_z, orient_axis='Z', orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', constraint_axis=(False, False, True), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+    bpy.ops.transform.resize(value=(1.06056, 1.06056, 1.06056),       orient_type='GLOBAL', orient_matrix=b_matrix, orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
 
 print(" add a texture to the model      ......................")
 bpy.ops.mesh.uv_texture_add()
