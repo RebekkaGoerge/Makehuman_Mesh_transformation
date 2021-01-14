@@ -8,7 +8,8 @@ The following script and plugin for makehuman can be used to load an arbitrary p
 1. [Getting start](#gettingStart)  
 2. [Use the plugin](#runTheCode)  
 3. [How does the scripts work](#script)  
-
+4. [Examples](#examples)  
+5. [How to work manually with the plugin](#manually)   
 
 <a name="gettingStart"></a>
 
