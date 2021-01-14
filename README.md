@@ -9,6 +9,7 @@ The following script and plugin for makehuman can be used to load an arbitrary p
 2. [Use the plugin](#runTheCode)  
 3. [How does the scripts work](#script)  
 
+
 <a name="gettingStart"></a>
 
 ## Getting started
@@ -23,25 +24,12 @@ Download [blender 2.9](https://www.blender.org/download/) and follow the install
 * [makeClothes2 plugin](http://download.tuxfamily.org/makehuman/plugins/makeclothes2-latest.zip)
 
 Install the blender plugins: 
-1. Open the preferences in blender:  
+1. Open the preferences in blender
+2. Press the install button
+3. Search for the zip files of the downloaded addons and press install
+4. By pressing "N" the makehuman bar appears at the right side
 
-<img src="https://user-images.githubusercontent.com/62305343/103997024-e0026980-519a-11eb-92f7-cc241d8ec832.png" alt="blender_addons_step1" width="600"/>
-
-
-2. Press the install button:
-
-<img src="https://user-images.githubusercontent.com/62305343/103997031-e2fd5a00-519a-11eb-8776-5dffafc90150.png" alt="blender_addons_step2" width="600"/>
-
-
-3. Search for the zip files of the downloaded addons and press install:
-
-<img src="https://user-images.githubusercontent.com/62305343/103997036-e4c71d80-519a-11eb-8bc9-066c7102e791.png" alt="blender_addons_step3" width="600"/>
-
-
-4. By pressing "N" the makehuman bar appears at the right side:
-
-<img src="https://user-images.githubusercontent.com/62305343/103997470-661eb000-519b-11eb-97a4-dcc8c81c8d4d.png" alt="blender_makehuman" width="600"/>
-
+![blender](https://user-images.githubusercontent.com/62305343/104573740-89db6d80-5655-11eb-9d75-d032c40e155b.gif)
 
 ### Download the following plugins for makehuman: 
 
@@ -52,18 +40,12 @@ Install the blender plugins:
 * [09_vsScript.py](https://github.com/RebekkaGoerge/Makehuman_Mesh_transformation/blob/main/vsMeshTransformation/9_vsScript.py)
 
 
-
-
 Download the plugins and copy them to the makehuman plugin directory (~\makehuman\v1py3\plugins). Activate them either in the settings.inl or in the makehuman gui (see following pictures). In Windows MHAPI might be already installed.
 
 1. The socket plugin and the MHAPI are makehuman plugins and can be activated in the normal plugin folder. 
-
-<img src="https://user-images.githubusercontent.com/62305343/103997466-64ed8300-519b-11eb-8de7-96f53de4aae0.png" alt="Install plugins" width="600"/>
-
 2. As the vs_Script is a user plugin, it needs to be activated as user plugin. 
 
-<img src="https://user-images.githubusercontent.com/62305343/103997415-569f6700-519b-11eb-8b17-0d3339c42c89.png" alt="Install plugins" width="600"/>
-
+![makehuman](https://user-images.githubusercontent.com/62305343/104573797-9d86d400-5655-11eb-8fd8-e6383a401ef6.gif)
 
 <a name="runTheCode"></a>
 
@@ -171,21 +153,12 @@ In the following some examples are presented, which were processed by the plugin
 
 The generated proxymeshes can be also modified in makehuman. In the following, it is described how to open a proxy file in makehuman and to transfer it. Furthermore, the plugin has also a gui in makehuman and can be used there. 
 
-## 1. 
+1. Open makehuman and select the tab "Geometries"
+2. Go to the tab Topologies
+3. Select in the right side the proxy file you want to load, it takes some seconds to load
+4. Remove the makehuman eye proxy, therefore go to eyes, and select in the left bar "none"
+5. Go to modelling and change the slider as you want, you can change the main body but also other parts of the body by selecting the corresponding tabs
+6. You can also use the plugin manually. To find it, go to the tab Utilities and select the vsScript tab. There you can export it to an stl file or load a proxy.
 
-<img src="https://user-images.githubusercontent.com/62305343/104008329-9705e180-51a9-11eb-8112-2acf3c6cc98c.png" alt="Manual Step1" width="600"/>
-
-*Open makehuman and select the tab Geometries, then go to the tab Topologies, in the tab topologies select in the right side the proxy file you want to load, it takes some seconds to load* *
-
-### 2. 
-
-<img src="https://user-images.githubusercontent.com/62305343/104008332-979e7800-51a9-11eb-8baa-690ee04b6025.png" alt="Manual Step3" width="600"/>
-
-*You also have to remove the makehuman eye proxy, therefore go to eyes, and select in the left bar "none"* 
-
-### 3. 
-
-<img src="https://user-images.githubusercontent.com/62305343/104008336-9a00d200-51a9-11eb-88c8-0c28d582f446.png" alt="Manual Step5" width="600"/>
-
-*Now you can go to modelling and change the slider as you want, you can change the main body but also other parts of the body by selecting the corresponding tabs*
+![manual_github](https://user-images.githubusercontent.com/62305343/104573803-9fe92e00-5655-11eb-940e-474f38280136.gif)
 
